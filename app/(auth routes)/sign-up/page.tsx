@@ -9,9 +9,10 @@ import styles from "./SignUpPage.module.css";
 export default function SignUpPage() {
   const router = useRouter();
   const { setUser } = useAuthStore();
+
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -19,11 +20,12 @@ export default function SignUpPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
-      const user = await register({ email, password, username });
+      const user = await register({ email, password });
       setUser(user);
       router.push("/profile");
-    } catch {
+    } catch (err) {
       setError("Failed to register. Please check your information.");
     } finally {
       setLoading(false);
@@ -34,20 +36,6 @@ export default function SignUpPage() {
     <main className={styles.mainContent}>
       <form onSubmit={handleSubmit} className={styles.form}>
         <h1 className={styles.formTitle}>Sign up</h1>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            className={styles.input}
-            placeholder="Choose a username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="email">Email</label>

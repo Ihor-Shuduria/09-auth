@@ -7,7 +7,7 @@ import SearchBox from "@/components/SearchBox/SearchBox";
 import Pagination from "@/components/Pagination/Pagination";
 import NoteList from "@/components/NoteList/NoteList";
 import css from "./NotesPage.module.css";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function useDebounce<T>(value: T, delay = 300): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -25,15 +25,12 @@ interface NotesClientProps {
 }
 
 export default function NotesClient({ tag }: NotesClientProps) {
-  const router = useRouter();
-
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
   const debouncedSearch = useDebounce(searchQuery, 300);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [debouncedSearch]);
 
@@ -52,6 +49,7 @@ export default function NotesClient({ tag }: NotesClientProps) {
     <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox onChange={setSearchQuery} />
+
         {data?.totalPages && data.totalPages > 1 && (
           <Pagination
             pageCount={data.totalPages}
@@ -59,13 +57,10 @@ export default function NotesClient({ tag }: NotesClientProps) {
             onPageChange={setCurrentPage}
           />
         )}
-        <button
-          type="button"
-          className={css.button}
-          onClick={() => router.push("/notes/action/create")}
-        >
+
+        <Link href="/notes/action/create" className={css.button}>
           Create note +
-        </button>
+        </Link>
       </header>
 
       {isLoading && <p>Loading...</p>}

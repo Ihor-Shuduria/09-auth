@@ -26,7 +26,6 @@ interface SessionStatus {
 export const register = (params: {
   email: string;
   password: string;
-  username: string;
 }): Promise<User> =>
   apiRequest<User>("/auth/register", { method: "POST", data: params });
 
